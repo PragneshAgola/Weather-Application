@@ -1,11 +1,11 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
-import { fetchWeatherAction } from "../thunk/weather";
+import { fetchWeatherAction } from "../thunk/Weather-API";
 
 const weatherSlice = createSlice({
-  name: "weather",
-  initialState: {},
+  name: "Weather-APP",
+  initialState: { weather: null, loading: true, error: null },
   extraReducers: (builder) => {
-    builder.addCase(fetchWeatherAction.pending, (state, action) => {
+    builder.addCase(fetchWeatherAction.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(fetchWeatherAction.fulfilled, (state, action) => {

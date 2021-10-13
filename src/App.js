@@ -1,20 +1,19 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
-import Navigation from "./components/Navigation";
+import { Switch, Route, Redirect } from "react-router";
 import Weather from "./pages/Weather";
-import Welcomepage from "./pages/WelcomePage";
+import FavoriteLocation from "./pages/FavoriteLocation";
+
 const App = () => {
   return (
     <React.Fragment>
-      <Navigation />
       <Switch>
-        <Redirect to="/" />
+        <Redirect to="/welcome" />
       </Switch>
       <Switch>
-        <Route path="/" component={Welcomepage} exact />
+        <Route path="/welcome" component={Weather} />
       </Switch>
       <Switch>
-        <Route path="/weather" component={Weather} />
+        <Route path="/favorite" component={FavoriteLocation}></Route>
       </Switch>
     </React.Fragment>
   );
