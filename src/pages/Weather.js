@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWeatherAction } from "../redux/thunk/Weather-API";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 import Loader from "../asset/weather-loader.gif";
 import WeatherLogo from "../asset/weatherLogo.gif";
@@ -9,10 +11,11 @@ import { MdBookmarkBorder, MdBookmark } from "react-icons/md";
 import { useHistory } from "react-router";
 
 function Weather() {
-  const [city, setCity] = useState("");
+  const [city, setCity] = useState("Ahmedabad");
   const [tempToggle, setTempToggle] = useState(false);
   const [favToggle, setFavToggle] = useState(false);
   const history = useHistory();
+  const weatherCollectionRef = collection(db, "weather");
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -32,7 +35,12 @@ function Weather() {
   const changeTempHandler = () => {
     setTempToggle((prev) => !prev);
   };
-  const changeFavHandler = (id) => {
+  const changeFavHandler = async (id, name, temp) => {
+    const obj = {
+      name: name,
+      temp: temp,
+    };
+    await addDoc(weatherCollectionRef, obj);
     setFavToggle((prev) => !prev);
     dispatch(fetchWeatherAction(favToggle));
     history.push(`/favorite/${id}`);
@@ -52,7 +60,11 @@ function Weather() {
                 <button
                   className="fav-button"
                   onClick={() => {
-                    changeFavHandler(weather?.id);
+                    changeFavHandler(
+                      weather?.id,
+                      weather?.name,
+                      weather?.main?.temp
+                    );
                   }}
                 >
                   {!favToggle ? <MdBookmarkBorder /> : <MdBookmark />}
