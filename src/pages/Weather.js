@@ -5,10 +5,14 @@ import { fetchWeatherAction } from "../redux/thunk/Weather-API";
 import Loader from "../asset/weather-loader.gif";
 import WeatherLogo from "../asset/weatherLogo.gif";
 import "./Weather.css";
+import { MdBookmarkBorder, MdBookmark } from "react-icons/md";
+import { useHistory } from "react-router";
 
 function Weather() {
   const [city, setCity] = useState("");
-  const [toggle, setToggle] = useState(false);
+  const [tempToggle, setTempToggle] = useState(false);
+  const [favToggle, setFavToggle] = useState(false);
+  const history = useHistory();
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -16,7 +20,7 @@ function Weather() {
   }, [dispatch]);
   const state = useSelector((state) => state);
   const { weather, loading, error } = state;
-  console.log(state);
+  // console.log(state);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -26,7 +30,12 @@ function Weather() {
     return <img src={Loader} alt=""></img>;
   }
   const changeTempHandler = () => {
-    setToggle((prev) => !prev);
+    setTempToggle((prev) => !prev);
+  };
+  const changeFavHandler = (id) => {
+    setFavToggle((prev) => !prev);
+    dispatch(fetchWeatherAction(favToggle));
+    history.push(`/favorite/${id}`);
   };
 
   return (
@@ -39,24 +48,35 @@ function Weather() {
         <section>
           <div className="container">
             <div className="weather-side">
-              <div className="weather-gradient"></div>
+              <div className="weather-gradient">
+                <button
+                  className="fav-button"
+                  onClick={() => {
+                    changeFavHandler(weather?.id);
+                  }}
+                >
+                  {!favToggle ? <MdBookmarkBorder /> : <MdBookmark />}
+                </button>
+              </div>
               <div className="date-container">
                 <h2 className="date-dayname">Wednesday</h2>
-                <span class="date-day">13 Oct 2021</span>
+                <span className="date-day">13 Oct 2021</span>
                 <i className="location-icon" data-feather="map-pin"></i>
-                <span class="location">
+                <span className="location">
                   {weather?.name}, {weather?.sys?.country}
                 </span>
               </div>
               <div className="weather-container">
                 <i className="weather-icon" data-feather="sun"></i>
                 <h1 className="weather-temp">
-                  {toggle
+                  {tempToggle
                     ? Math.ceil(weather?.main?.temp)
                     : Math.ceil(parseFloat(weather?.main?.temp) * (9 / 5) + 32)}
-                  {toggle ? "°C" : "°F"}
+                  {tempToggle ? "°C" : "°F"}
                 </h1>
-                <span onClick={changeTempHandler}>{toggle ? "F" : "C"}°</span>
+                <span onClick={changeTempHandler}>
+                  {tempToggle ? "F" : "C"}°
+                </span>
                 <h3 className="weather-desc">
                   {weather?.weather[0].description}
                 </h3>
@@ -77,33 +97,33 @@ function Weather() {
                   </div>
                 </div>
               </div>
-              {
-                <div className="week-container">
-                  <ul className="week-list">
-                    <li className="active">
-                      <i className="day-icon" data-feather="sun"></i>
-                      <span className="day-name">Tue</span>
-                      <span className="day-temp">29°C</span>
-                    </li>
-                    <li>
-                      <i className="day-icon" data-feather="cloud"></i>
-                      <span className="day-name">Wed</span>
-                      <span className="day-temp">21°C</span>
-                    </li>
-                    <li>
-                      <i className="day-icon" data-feather="cloud-snow"></i>
-                      <span className="day-name">Thu</span>
-                      <span className="day-temp">08°C</span>
-                    </li>
-                    <li>
-                      <i className="day-icon" data-feather="cloud-rain"></i>
-                      <span className="day-name">Fry</span>
-                      <span className="day-temp">19°C</span>
-                    </li>
-                    <div className="clear"></div>
-                  </ul>
-                </div>
-              }
+
+              <div className="week-container">
+                <ul className="week-list">
+                  <li className="active">
+                    <i className="day-icon" data-feather="sun"></i>
+                    <span className="day-name">Tue</span>
+                    <span className="day-temp">29°C</span>
+                  </li>
+                  <li>
+                    <i className="day-icon" data-feather="cloud"></i>
+                    <span className="day-name">Wed</span>
+                    <span className="day-temp">21°C</span>
+                  </li>
+                  <li>
+                    <i className="day-icon" data-feather="cloud-snow"></i>
+                    <span className="day-name">Thu</span>
+                    <span className="day-temp">08°C</span>
+                  </li>
+                  <li>
+                    <i className="day-icon" data-feather="cloud-rain"></i>
+                    <span className="day-name">Fry</span>
+                    <span className="day-temp">19°C</span>
+                  </li>
+                  <div className="clear"></div>
+                </ul>
+              </div>
+
               <div className="location-container">
                 <form onSubmit={submitHandler}>
                   <input
@@ -130,6 +150,7 @@ function Weather() {
                       {error.message}
                     </p>
                   )}
+                  {console.log(weather?.id)}
                 </form>
               </div>
             </div>

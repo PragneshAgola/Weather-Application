@@ -1,16 +1,18 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import classes from "../components/Navigation.module.css";
+
 const Navigation = () => {
   return (
     <React.Fragment>
-      <ul>
-        <li>
-          <NavLink to="/">Welcome Page</NavLink>
+      <div className={classes.ul}>
+        <li className={classes.li}>
+          <NavLink to="/weather">Weather Home</NavLink>
         </li>
-        <li>
-          <NavLink to="/weather">Weather</NavLink>
+        <li className={classes.li}>
+          <NavLink to="/favorite/:id">Favorite Location</NavLink>
         </li>
-      </ul>
+      </div>
     </React.Fragment>
   );
 };

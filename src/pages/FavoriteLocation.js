@@ -1,39 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
+import { useParams } from "react-router";
+import { fetchWeatherAction } from "../redux/thunk/Weather-API";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+const FavoriteWeather = () => {
+  const [favWeather, setFavWeather] = useState([]);
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  const { weather } = state;
+  // const { weather } = state;
+  const weatherCollectionRef = collection(db, "weather");
+  const params = useParams();
+  const getFavoriteLocation = async () => {
+    const response = await getDocs(weatherCollectionRef);
 
-const Students = () => {
-  const [students, setStudents] = useState([]);
-  const studentsCollectionRef = collection(db, "student");
-
-  const getStudents = async () => {
-    const response = await getDocs(studentsCollectionRef);
-
-    setStudents(
+    setFavWeather(
       response.docs.map((setData) => ({ ...setData.data(), id: setData.id }))
     );
+    dispatch(fetchWeatherAction());
   };
 
   useEffect(() => {
-    getStudents();
+    getFavoriteLocation();
   }, []);
 
   return (
     <React.Fragment>
-      {students.map((getData) => {
-        return (
-          <div style={{ fontSize: "20px" }} key={getData.id}>
-            <ul>
-              <li style={{ listStyle: "none" }}>
-                Weather Country: {getData} <br />
-                Student Percentage: {getData}
-              </li>
-            </ul>
-          </div>
-        );
-      })}
+      <div style={{ maxHeight: "500px" }}>
+        <h1>Favorite Page</h1>
+
+        {favWeather && <div>{weather?.city}</div>}
+      </div>
     </React.Fragment>
   );
 };
 
-export default Students;
+export default FavoriteWeather;

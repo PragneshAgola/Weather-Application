@@ -2,19 +2,22 @@ import React from "react";
 import { Switch, Route, Redirect } from "react-router";
 import Weather from "./pages/Weather";
 import FavoriteLocation from "./pages/FavoriteLocation";
-
+import Navigation from "./components/Navigation";
 const App = () => {
   return (
     <React.Fragment>
-      <Switch>
-        <Redirect to="/welcome" />
-      </Switch>
-      <Switch>
-        <Route path="/welcome" component={Weather} />
-      </Switch>
-      <Switch>
-        <Route path="/favorite" component={FavoriteLocation}></Route>
-      </Switch>
+      <Navigation />
+      <div style={{ maxHeight: "500px" }}>
+        <Switch>
+          <Redirect to="/weather" />
+        </Switch>
+        <Switch>
+          <Route path="/weather" component={Weather} />
+        </Switch>
+        <Switch>
+          <Route path="/favorite/:id" component={FavoriteLocation}></Route>
+        </Switch>
+      </div>
     </React.Fragment>
   );
 };
