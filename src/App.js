@@ -15,7 +15,7 @@ const App = () => {
           <Route path="/weather" component={Weather} />
         </Switch>
         <Switch>
-          <Route path="/favorite/:id" component={FavoriteLocation}></Route>
+          <Route path="/favorite" component={FavoriteLocation}></Route>
         </Switch>
       </div>
     </React.Fragment>

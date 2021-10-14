@@ -10,7 +10,7 @@ const Navigation = () => {
           <NavLink to="/weather">Weather Home</NavLink>
         </li>
         <li className={classes.li}>
-          <NavLink to="/favorite/:id">Favorite Location</NavLink>
+          <NavLink to="/favorite">Favorite Location</NavLink>
         </li>
       </div>
     </React.Fragment>

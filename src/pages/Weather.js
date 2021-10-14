@@ -5,15 +5,15 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 import Loader from "../asset/weather-loader.gif";
-import WeatherLogo from "../asset/weatherLogo.gif";
+import WeatherLogo from "../asset/weatherLogo.png";
 import "./Weather.css";
 import { MdBookmarkBorder, MdBookmark } from "react-icons/md";
 import { useHistory } from "react-router";
 
 function Weather() {
-  const [city, setCity] = useState("Ahmedabad");
+  const [city, setCity] = useState("");
   const [tempToggle, setTempToggle] = useState(false);
-  const [favToggle, setFavToggle] = useState(false);
+  const [favToggle, setFavToggle] = useState(true);
   const history = useHistory();
   const weatherCollectionRef = collection(db, "weather");
 
@@ -41,7 +41,7 @@ function Weather() {
       temp: temp,
     };
     await addDoc(weatherCollectionRef, obj);
-    setFavToggle((prev) => !prev);
+    setFavToggle(!favToggle);
     dispatch(fetchWeatherAction(favToggle));
     history.push(`/favorite/${id}`);
   };
@@ -67,28 +67,26 @@ function Weather() {
                     );
                   }}
                 >
-                  {!favToggle ? <MdBookmarkBorder /> : <MdBookmark />}
+                  {favToggle ? <MdBookmarkBorder /> : <MdBookmark />}
                 </button>
               </div>
               <div className="date-container">
-                <h2 className="date-dayname">Wednesday</h2>
-                <span className="date-day">13 Oct 2021</span>
-                <i className="location-icon" data-feather="map-pin"></i>
-                <span className="location">
+                <h2 className="date-dayname">
                   {weather?.name}, {weather?.sys?.country}
-                </span>
+                </h2>
+                <span>13 Oct 2021, Thursday</span>
               </div>
               <div className="weather-container">
+                <span onClick={changeTempHandler}>
+                  {tempToggle ? "Temp F°" : "Temp C°"}
+                </span>
                 <i className="weather-icon" data-feather="sun"></i>
                 <h1 className="weather-temp">
                   {tempToggle
                     ? Math.ceil(weather?.main?.temp)
                     : Math.ceil(parseFloat(weather?.main?.temp) * (9 / 5) + 32)}
-                  {tempToggle ? "°C" : "°F"}
+                  {tempToggle ? " °C" : " °F"}
                 </h1>
-                <span onClick={changeTempHandler}>
-                  {tempToggle ? "F" : "C"}°
-                </span>
                 <h3 className="weather-desc">
                   {weather?.weather[0].description}
                 </h3>
@@ -108,32 +106,6 @@ function Weather() {
                     <div className="clear"></div>
                   </div>
                 </div>
-              </div>
-
-              <div className="week-container">
-                <ul className="week-list">
-                  <li className="active">
-                    <i className="day-icon" data-feather="sun"></i>
-                    <span className="day-name">Tue</span>
-                    <span className="day-temp">29°C</span>
-                  </li>
-                  <li>
-                    <i className="day-icon" data-feather="cloud"></i>
-                    <span className="day-name">Wed</span>
-                    <span className="day-temp">21°C</span>
-                  </li>
-                  <li>
-                    <i className="day-icon" data-feather="cloud-snow"></i>
-                    <span className="day-name">Thu</span>
-                    <span className="day-temp">08°C</span>
-                  </li>
-                  <li>
-                    <i className="day-icon" data-feather="cloud-rain"></i>
-                    <span className="day-name">Fry</span>
-                    <span className="day-temp">19°C</span>
-                  </li>
-                  <div className="clear"></div>
-                </ul>
               </div>
 
               <div className="location-container">
