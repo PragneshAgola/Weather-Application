@@ -150,7 +150,6 @@ body {
 .today-info {
   padding: 15px;
   margin: 0 25px 25px 25px;
-  /*  box-shadow: 0 0 50px -5px rgba(0, 0, 0, 0.25); */
   border-radius: 10px;
 }
 
@@ -167,26 +166,27 @@ body {
   float: right;
 }
 
-.week-list {
+.fav-list {
   list-style-type: none;
   padding: 0;
-  margin: 10px 35px;
   -webkit-box-shadow: 0 0 50px -5px rgba(0, 0, 0, 0.25);
   box-shadow: 0 0 50px -5px rgba(0, 0, 0, 0.25);
   border-radius: 25px 10px;
   background: transparent;
 }
 
-.week-list > li {
-  padding: 15px;
+.fav-list > li {
+  padding: 25px;
   cursor: pointer;
   -webkit-transition: 200ms ease;
   -o-transition: 200ms ease;
   transition: 200ms ease;
   border-radius: 10px;
+  display: inline-flex !important;
+  width: 100%;
 }
 
-.week-list > li:hover {
+.fav-list > li:hover {
   -webkit-transform: scale(1.1);
   -ms-transform: scale(1.1);
   transform: scale(1.1);
@@ -195,33 +195,23 @@ body {
   -webkit-box-shadow: 0 0 40px -5px rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 40px -5px rgba(0, 0, 0, 0.2);
 }
-.week-list :hover {
+.fav-list :hover {
   background: #fff;
 }
 
-.week-list > li.active {
+.fav-list > li.active {
   color: #222831;
   border-radius: 25px 10px;
 }
 
-.week-list > li .day-name {
-  display: block;
-  margin: 10px 0 0 0;
-  text-align: center;
+.fav-list > li .fav-name {
+  width: 100%;
 }
 
-.week-list > li .day-icon {
+.fav-list > li .fav-icon {
   display: block;
-
   width: auto;
   margin: 0 auto;
-}
-
-.week-list > li .day-temp {
-  display: block;
-  text-align: center;
-  margin: 10px 0 0 0;
-  font-weight: 700;
 }
 
 .location-container {

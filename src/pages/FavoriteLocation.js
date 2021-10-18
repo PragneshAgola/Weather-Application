@@ -1,11 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 // import { useParams } from "react-router";
 import { GrLocation } from "react-icons/gr";
 import { FaTemperatureLow } from "react-icons/fa";
-import { MdBookmark } from "react-icons/md";
+
 import "./Weather.css";
+
+/*** 
+@Purpose : get data of favorite location from firestore
+@Parameter : {}
+@Author : INIC
+**/
 
 const FavoriteWeather = () => {
   const [favWeather, setFavWeather] = useState([]);
@@ -23,6 +29,12 @@ const FavoriteWeather = () => {
     getFavoriteLocation();
   }, [getFavoriteLocation]);
 
+  const deleteHandler = async (id) => {
+    const removeFavLocation = doc(weatherCollectionRef, id);
+    await deleteDoc(removeFavLocation);
+    getFavoriteLocation();
+  };
+
   return (
     <React.Fragment>
       <div>
@@ -30,20 +42,22 @@ const FavoriteWeather = () => {
         {/*{console.log(params)}*/}
         {favWeather.map((data, index) => (
           <div key={index}>
-            <div className="week-container">
-              <ul className="week-list">
+            <div
+              className="fav-container"
+              onClick={() => deleteHandler(data.id)}
+            >
+              <ul className="fav-list">
                 <li className="active">
-                  <i className="day-icon" data-feather="sun"></i>
-                  <MdBookmark />
-                  <span className="day-name">
+                  <span className="fav-name">
                     <GrLocation />
-                    {` ${data.name}`}
+                    {data.name}
                   </span>
-                  <span className="day-temp">
+                  <span>
                     <FaTemperatureLow />
-                    {` ${data.temp}`}
+                    {data.temp}
                   </span>
                 </li>
+
                 <div className="clear"></div>
               </ul>
             </div>

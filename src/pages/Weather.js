@@ -9,6 +9,12 @@ import WeatherLogo from "../asset/weatherLogo.png";
 import "./Weather.css";
 import { MdBookmarkBorder, MdBookmark } from "react-icons/md";
 
+/*** 
+@Purpose : Dispatching function, Loading State, Error Handling, fetching data using redux, State manipulaiton, Add data using addDoc in firestore
+@Parameter : {}
+@Author : INIC
+**/
+
 const Weather = () => {
   const [city, setCity] = useState("Ahmedabad");
   const [tempToggle, setTempToggle] = useState(false);
@@ -22,6 +28,10 @@ const Weather = () => {
   const state = useSelector((state) => state);
   console.log();
   const { weather, loading, error } = state;
+
+  const clearValue = () => {
+    setCity("");
+  };
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -56,41 +66,65 @@ const Weather = () => {
         <section>
           <div className="container">
             <div className="weather-side">
-              <div className="weather-gradient">
-                <button
-                  className="fav-button"
-                  onClick={() => {
-                    changeFavHandler(
-                      weather?.id,
-                      weather?.name,
-                      weather?.main?.temp
-                    );
-                  }}
-                >
-                  {favToggle ? <MdBookmarkBorder /> : <MdBookmark />}
-                </button>
-              </div>
-              <div className="date-container">
-                <h2 className="date-dayname">
-                  {weather?.name}, {weather?.sys?.country}
-                </h2>
-                <span>18 Oct 2021, Monday</span>
-              </div>
-              <div className="weather-container">
-                <span onClick={changeTempHandler}>
-                  {tempToggle ? "Temp C°" : "Temp F°"}
-                </span>
-                <i className="weather-icon" data-feather="sun"></i>
-                <h1 className="weather-temp">
-                  {tempToggle
-                    ? Math.ceil(parseFloat(weather?.main?.temp) * (9 / 5) + 32)
-                    : Math.ceil(weather?.main?.temp)}
-                  {tempToggle ? " °F" : " °C"}
-                </h1>
-                <h3 className="weather-desc">
-                  {weather?.weather[0].description}
-                </h3>
-              </div>
+              {!error ? (
+                <div>
+                  <div className="weather-gradient">
+                    <button
+                      className="fav-button"
+                      onClick={() => {
+                        changeFavHandler(
+                          weather?.id,
+                          weather?.name,
+                          weather?.main?.temp
+                        );
+                      }}
+                    >
+                      {favToggle ? <MdBookmarkBorder /> : <MdBookmark />}
+                    </button>
+                  </div>
+                  <div className="date-container">
+                    <h2 className="date-dayname">
+                      {weather?.name}, {weather?.sys?.country}
+                    </h2>
+                    <span>{new Date().toDateString("en-US")}</span>
+                  </div>
+
+                  <div className="weather-container">
+                    <span onClick={changeTempHandler}>
+                      {tempToggle ? "Temp C°" : "Temp F°"}
+                    </span>
+                    <i className="weather-icon" data-feather="sun"></i>
+
+                    <h1 className="weather-temp">
+                      {tempToggle
+                        ? Math.ceil(
+                            parseFloat(weather?.main?.temp) * (9 / 5) + 32
+                          )
+                        : Math.ceil(weather?.main?.temp)}
+                      {tempToggle ? " °F" : " °C"}
+                    </h1>
+
+                    <h3 className="weather-desc">
+                      {weather?.weather[0].description}
+                    </h3>
+                  </div>
+                </div>
+              ) : (
+                error && (
+                  <div className="weather-gradient">
+                    <h1
+                      style={{
+                        color: "black",
+                        textAlign: "center",
+                        textTransform: "capitalize",
+                        paddingTop: "50%",
+                      }}
+                    >
+                      🌎 {error.message}
+                    </h1>
+                  </div>
+                )
+              )}
             </div>
             <div className="info-side">
               <div className="today-info-container">
@@ -116,6 +150,7 @@ const Weather = () => {
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="Search Location"
+                    onClick={clearValue}
                   ></input>
                   <button
                     className="search-button"
@@ -124,18 +159,6 @@ const Weather = () => {
                   >
                     Search
                   </button>
-                  {error && (
-                    <p
-                      style={{
-                        color: "#383636",
-                        margin: "10px",
-                        letterSpacing: "3px",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      {error.message}
-                    </p>
-                  )}
                 </form>
               </div>
             </div>

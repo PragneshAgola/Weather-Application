@@ -1,6 +1,12 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import { fetchWeatherAction } from "../actionCreator/Weather-API";
 
+/*** 
+@Purpose : builder callback function,addcase method,extrareducer for fetching external actions 
+@Parameter : {}
+@Author : INIC
+**/
+
 const weatherSlice = createSlice({
   name: "Weather-APP",
   initialState: { weather: null, loading: true, error: null },

@@ -1,7 +1,11 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import classes from "../components/Navigation.module.css";
-
+/*** 
+@Purpose : Used for Navigation Link
+@Parameter : {}
+@Author : INIC
+**/
 const Navigation = () => {
   return (
     <React.Fragment>
@@ -10,7 +14,7 @@ const Navigation = () => {
           <NavLink to="/weather">Weather Home</NavLink>
         </li>
         <li className={classes.li}>
-          <NavLink to="/favorite">Favorite Location</NavLink>
+          <NavLink to="/favorite">Favourite Location</NavLink>
         </li>
       </div>
     </React.Fragment>

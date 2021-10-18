@@ -1,12 +1,18 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+/*** 
+@Purpose : Get API through async function using axios in Redux Toolkit 
+@Parameter : {}
+@Author : INIC
+**/
+
 export const fetchWeatherAction = createAsyncThunk(
   "weather/fetch",
   async (payload, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${payload}&units=metric&appid=d83b913db32b945abcb101b8a85d637b`
+        `https://api.openweathermap.org/data/2.5/weather?q=${payload}&units=metric&appid=${process.env.REACT_APP_OPEN_WEATHER_KEY}`
       );
       return data;
     } catch (error) {

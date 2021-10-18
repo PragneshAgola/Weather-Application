@@ -1,13 +1,19 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "@firebase/firestore";
 
+/*** 
+@Purpose : Exporting FireStore Database using Firebase FireStore
+@Parameter : {}
+@Author : INIC
+**/
+
 const firebaseConfig = {
-  apiKey: "AIzaSyD6GclPNWBOS0ywBuYzH2WDZLDrUZwPUGA",
-  authDomain: "weather-http-1de71.firebaseapp.com",
-  projectId: "weather-http-1de71",
-  storageBucket: "weather-http-1de71.appspot.com",
-  messagingSenderId: "985984382409",
-  appId: "1:985984382409:web:025a045cee23b7632da418",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APPID,
 };
 const app = initializeApp(firebaseConfig);
 
