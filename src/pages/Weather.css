@@ -66,7 +66,6 @@ body {
   position: relative;
   height: 100%;
   border-radius: 25px 10px;
-  background-image: url("");
   width: 300px;
   -webkit-box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.2);
@@ -82,7 +81,7 @@ body {
 
 .weather-side:hover {
   -webkit-transform: scale(1.1) perspective(1500px) rotateY(10deg);
-  transform: scale(1) perspective(1500px) rotateY(10deg);
+  transform: scale(1.2) perspective(1500px) rotateY(10deg);
 }
 
 .weather-gradient {
@@ -145,6 +144,7 @@ body {
   float: left;
   height: 100%;
   padding-top: 25px;
+  color: #383636;
 }
 
 .today-info {
@@ -226,11 +226,12 @@ body {
 
 .location-container {
   padding: 25px 35px;
+  margin-top: 200px;
 }
 
 .location-button {
   outline: none;
-  width: auto;
+  width: 15rem;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   border: none;
@@ -279,4 +280,5 @@ body {
   font-size: 28px;
   float: right;
   margin: 20px 20px 0px 0px;
+  color: white;
 }

@@ -1,34 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
-import { useParams } from "react-router";
+// import { useParams } from "react-router";
 import { GrLocation } from "react-icons/gr";
 import { FaTemperatureLow } from "react-icons/fa";
 import { MdBookmark } from "react-icons/md";
-
 import "./Weather.css";
 
 const FavoriteWeather = () => {
   const [favWeather, setFavWeather] = useState([]);
   const weatherCollectionRef = collection(db, "weather");
-  const params = useParams();
-  const getFavoriteLocation = async () => {
+  // const params = useParams();
+  const getFavoriteLocation = useCallback(async () => {
     const response = await getDocs(weatherCollectionRef);
 
     setFavWeather(
       response.docs.map((setData) => ({ ...setData.data(), id: setData.id }))
     );
-  };
+  }, []);
 
   useEffect(() => {
     getFavoriteLocation();
-  }, []);
+  }, [getFavoriteLocation]);
 
   return (
     <React.Fragment>
       <div>
         <h2>Your Favorite Location</h2>
-        {console.log(params)}
+        {/*{console.log(params)}*/}
         {favWeather.map((data, index) => (
           <div key={index}>
             <div className="week-container">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchWeatherAction } from "../redux/thunk/Weather-API";
+import { fetchWeatherAction } from "../redux/actionCreator/Weather-API";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -8,13 +8,11 @@ import Loader from "../asset/weather-loader.gif";
 import WeatherLogo from "../asset/weatherLogo.png";
 import "./Weather.css";
 import { MdBookmarkBorder, MdBookmark } from "react-icons/md";
-import { useHistory } from "react-router";
 
-function Weather() {
-  const [city, setCity] = useState("");
+const Weather = () => {
+  const [city, setCity] = useState("Ahmedabad");
   const [tempToggle, setTempToggle] = useState(false);
   const [favToggle, setFavToggle] = useState(true);
-  const history = useHistory();
   const weatherCollectionRef = collection(db, "weather");
 
   const dispatch = useDispatch();
@@ -22,11 +20,13 @@ function Weather() {
     dispatch(fetchWeatherAction("Ahmedabad"));
   }, [dispatch]);
   const state = useSelector((state) => state);
+  console.log();
   const { weather, loading, error } = state;
-  // console.log(state);
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  const submitHandler = (event) => {
+    event.preventDefault();
+    setTempToggle(false);
+    setFavToggle(false);
     setCity("");
   };
   if (loading) {
@@ -36,14 +36,14 @@ function Weather() {
     setTempToggle((prev) => !prev);
   };
   const changeFavHandler = async (id, name, temp) => {
+    setFavToggle(!favToggle);
     const obj = {
       name: name,
       temp: temp,
     };
-    await addDoc(weatherCollectionRef, obj);
-    setFavToggle(!favToggle);
-    dispatch(fetchWeatherAction(favToggle));
-    history.push(`/favorite/${id}`);
+    if (favToggle) {
+      await addDoc(weatherCollectionRef, obj);
+    }
   };
 
   return (
@@ -74,18 +74,18 @@ function Weather() {
                 <h2 className="date-dayname">
                   {weather?.name}, {weather?.sys?.country}
                 </h2>
-                <span>13 Oct 2021, Thursday</span>
+                <span>18 Oct 2021, Monday</span>
               </div>
               <div className="weather-container">
                 <span onClick={changeTempHandler}>
-                  {tempToggle ? "Temp F°" : "Temp C°"}
+                  {tempToggle ? "Temp C°" : "Temp F°"}
                 </span>
                 <i className="weather-icon" data-feather="sun"></i>
                 <h1 className="weather-temp">
                   {tempToggle
-                    ? Math.ceil(weather?.main?.temp)
-                    : Math.ceil(parseFloat(weather?.main?.temp) * (9 / 5) + 32)}
-                  {tempToggle ? " °C" : " °F"}
+                    ? Math.ceil(parseFloat(weather?.main?.temp) * (9 / 5) + 32)
+                    : Math.ceil(weather?.main?.temp)}
+                  {tempToggle ? " °F" : " °C"}
                 </h1>
                 <h3 className="weather-desc">
                   {weather?.weather[0].description}
@@ -127,14 +127,15 @@ function Weather() {
                   {error && (
                     <p
                       style={{
-                        color: "white",
-                        textAlign: "center",
+                        color: "#383636",
+                        margin: "10px",
+                        letterSpacing: "3px",
+                        textTransform: "capitalize",
                       }}
                     >
                       {error.message}
                     </p>
                   )}
-                  {console.log(weather?.id)}
                 </form>
               </div>
             </div>
@@ -143,6 +144,6 @@ function Weather() {
       </div>
     </React.Fragment>
   );
-}
+};
 
 export default Weather;
