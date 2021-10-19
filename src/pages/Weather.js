@@ -48,12 +48,10 @@ const Weather = () => {
   const changeFavHandler = async (id, name, temp) => {
     setFavToggle(!favToggle);
 
-    if (favToggle) {
-      await setDoc(doc(db, "weather", `${Number(id)}`), {
-        name: name,
-        temp: temp,
-      });
-    }
+    await setDoc(doc(db, "weather", `${Number(id)}`), {
+      name: name,
+      temp: temp,
+    });
   };
 
   return (
