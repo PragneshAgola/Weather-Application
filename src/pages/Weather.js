@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWeatherAction } from "../redux/actionCreator/Weather-API";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 import Loader from "../asset/weather-loader.gif";
@@ -9,50 +9,50 @@ import WeatherLogo from "../asset/weatherLogo.png";
 import "./Weather.css";
 import { MdBookmarkBorder, MdBookmark } from "react-icons/md";
 
-/*** 
+/* 
 @Purpose : Dispatching function, Loading State, Error Handling, fetching data using redux, State manipulaiton, Add data using addDoc in firestore
 @Parameter : {}
 @Author : INIC
-**/
+*/
 
 const Weather = () => {
   const [city, setCity] = useState("Ahmedabad");
   const [tempToggle, setTempToggle] = useState(false);
-  const [favToggle, setFavToggle] = useState(true);
-  const weatherCollectionRef = collection(db, "weather");
-
+  const [favToggle, setFavToggle] = useState(false);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchWeatherAction("Ahmedabad"));
   }, [dispatch]);
-  const state = useSelector((state) => state);
-  console.log();
-  const { weather, loading, error } = state;
 
+  const state = useSelector((state) => state);
+  const { weather, loading, error } = state;
   const clearValue = () => {
     setCity("");
   };
-
   const submitHandler = (event) => {
     event.preventDefault();
+    dispatch(fetchWeatherAction(city));
     setTempToggle(false);
     setFavToggle(false);
     setCity("");
   };
+
   if (loading) {
     return <img src={Loader} alt=""></img>;
   }
   const changeTempHandler = () => {
     setTempToggle((prev) => !prev);
   };
+
   const changeFavHandler = async (id, name, temp) => {
     setFavToggle(!favToggle);
-    const obj = {
-      name: name,
-      temp: temp,
-    };
+
     if (favToggle) {
-      await addDoc(weatherCollectionRef, obj);
+      await setDoc(doc(db, "weather", `${Number(id)}`), {
+        name: name,
+        temp: temp,
+      });
     }
   };
 
@@ -79,7 +79,7 @@ const Weather = () => {
                         );
                       }}
                     >
-                      {favToggle ? <MdBookmarkBorder /> : <MdBookmark />}
+                      {favToggle ? <MdBookmark /> : <MdBookmarkBorder />}
                     </button>
                   </div>
                   <div className="date-container">
@@ -152,11 +152,7 @@ const Weather = () => {
                     placeholder="Search Location"
                     onClick={clearValue}
                   ></input>
-                  <button
-                    className="search-button"
-                    value={city}
-                    onClick={() => dispatch(fetchWeatherAction(city))}
-                  >
+                  <button className="search-button" type="submit" value={city}>
                     Search
                   </button>
                 </form>
